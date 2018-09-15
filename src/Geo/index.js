@@ -1,48 +1,44 @@
 // @flow
-const axios = require('axios');
+
+import axios from "axios";
 
 class Geo {
+  url = "http://ip-api.com/json/";
 
-  url = 'http://ip-api.com/json/';
   httpClient: axios;
 
   constructor(httpClient: any) {
-
-      this.httpClient = httpClient ? httpClient : axios;
-
+    this.httpClient = httpClient || axios;
   }
 
-  getLocation(ip: string, cb: any) {
+  async getLocation(ip: string) {
+    const self = this;
+    const promise = await this.httpClient.get(this.url + ip, {
+      responseType: "json",
+      transformResponse: [
+        data => {
+          let responseObj = JSON.parse(data);
+          return self.getData(responseObj);
+        }
+      ]
+    });
 
-    let self = this;
-    let promise = this.httpClient.get(this.url + ip, {
-      responseType: 'json'
-    }).then(function(response) {
-
-        cb(self.getData(response.data))
-        
-      }).catch(function() {
-
-        cb(false);
-
-    })
-
+    return promise;
   }
 
   getData(rawReponseData: Object) {
-
-    if (!rawReponseData || rawReponseData.status === 'fail') {
+    if (!rawReponseData || rawReponseData.status === "fail") {
       return false;
     }
 
     return {
-      "city": rawReponseData.city,
-      "country": rawReponseData.country,
-      "regionName": rawReponseData.regionName
-    }
-
+      city: rawReponseData.city,
+      country: rawReponseData.country,
+      regionName: rawReponseData.regionName,
+      lon: rawReponseData.lon,
+      lat: rawReponseData.lat
+    };
   }
-
 }
 
 export default Geo;

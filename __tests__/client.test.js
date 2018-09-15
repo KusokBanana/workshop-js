@@ -1,8 +1,7 @@
 // @flow
 import Geo from '../src/Geo';
-
-const axios = require('axios');
-const MockAdapter = require('axios-mock-adapter');
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 
 test('real ip, real data', () => {
 
@@ -15,11 +14,10 @@ test('real ip, real data', () => {
     mock.onGet().reply(200, mockResponseData);
 
     let geo = new Geo(axios);
-    geo.getLocation('46.148.196.76', function (result) {
+    geo.getLocation("46.148.196.76").then((result: Object) => {
+      expect(result.data).toEqual(mockResponseData);
+    });
 
-        expect(result).toEqual(mockResponseData);
-
-    })
 
 });
 
@@ -31,10 +29,8 @@ test("can't get get data", () => {
     mock.onGet().reply(200, mockResponseData);
 
     let geo = new Geo(axios);
-    geo.getLocation('0.0.0.0', function (result) {
-
-        expect(result).toBeFalsy();
-
+    geo.getLocation('0.0.0.0').then((result: Object) => {
+        expect(result.data).toBeFalsy();
     })
     
 });
@@ -45,10 +41,8 @@ test("can't get response", () => {
     mock.onGet().reply(500);
 
     let geo = new Geo(axios);
-    geo.getLocation('46.148.196.76', function (result) {
-
-        expect(result).toBeFalsy();
-
-    })
+    geo.getLocation("46.148.196.76").then((result: Object) => {
+      expect(result.data).toBeFalsy();
+    });
     
 });

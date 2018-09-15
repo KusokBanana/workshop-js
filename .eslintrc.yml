@@ -3,8 +3,10 @@
 plugins:
   # https://github.com/jest-community/eslint-plugin-jest
   - jest
+  - import
   # https://github.com/gajus/eslint-plugin-flowtype
   - flowtype
+  - flow
   # https://github.com/babel/eslint-plugin-babel
   - babel
 
@@ -18,6 +20,7 @@ parser: babel-eslint
 
 extends:
   - 'airbnb-base'
+  - 'airbnb'
   - 'plugin:jest/recommended'
   - 'plugin:flowtype/recommended'
 
