@@ -1,7 +1,7 @@
 # workshop-js
 
-Example of use:
+<b>Example of use:</b>
 
-import Client from './src';
-let client = new Client('46.148.196.76');
-console.log(client.getLocation());
+import Geo from './src'; <br>
+let geo = new Geo(); <br>
+geo.getLocation('46.148.196.76', function(location) { console.log(location); })
