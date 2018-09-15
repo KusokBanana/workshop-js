@@ -14,7 +14,6 @@ class Geo {
   async getLocation(ip: string) {
     const self = this;
     const promise = await this.httpClient.get(this.url + ip, {
-      responseType: "json",
       transformResponse: [
         data => {
           let responseObj = JSON.parse(data);
