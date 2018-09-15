@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-import Client from '../Client';
+import Geo from '../Geo';
 
-let client = new Client('46.148.196.76');
-console.log(client.getLocation());
+let geo = new Geo();
+let promise = geo.getLocation('46.148.196.76', function (result) {
+    console.log(result);
+});

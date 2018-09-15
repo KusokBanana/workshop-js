@@ -1,5 +1,5 @@
 // @flow
 
-import Client from './Client';
+import Geo from './Geo';
 
 export default Client;

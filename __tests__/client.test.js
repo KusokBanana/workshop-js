@@ -1,17 +1,54 @@
 // @flow
+import Geo from '../src/Geo';
 
-import Client from '../src/Client';
-import Location from '../src/Client/location';
+const axios = require('axios');
+const MockAdapter = require('axios-mock-adapter');
 
-test('client real ip', () => {
-    let client = new Client('46.148.196.76');
-    
-    expect(client.getLocation()).toBeInstanceOf(Location);
+test('real ip, real data', () => {
+
+    let mock = new MockAdapter(axios);
+    const mockResponseData = {
+        city: 'Moscow',
+        country: 'Russia',
+        regionName: 'Moscow'
+    };
+    mock.onGet().reply(200, mockResponseData);
+
+    let geo = new Geo(axios);
+    geo.getLocation('46.148.196.76', function (result) {
+
+        expect(result).toEqual(mockResponseData);
+
+    })
+
 });
 
-test('client unreal ip', () => {
-    let client = new Client('0.0.0.0');
+test("can't get get data", () => {
+    let mock = new MockAdapter(axios);
+    const mockResponseData = {
+        status: 'fail',
+    };
+    mock.onGet().reply(200, mockResponseData);
+
+    let geo = new Geo(axios);
+    geo.getLocation('0.0.0.0', function (result) {
+
+        expect(result).toBeFalsy();
+
+    })
     
-    // expect(client.getLocation()).toThrow(Error);
-    expect(client.getLocation()).toBeFalsy();
+});
+
+
+test("can't get response", () => {
+    let mock = new MockAdapter(axios);
+    mock.onGet().reply(500);
+
+    let geo = new Geo(axios);
+    geo.getLocation('46.148.196.76', function (result) {
+
+        expect(result).toBeFalsy();
+
+    })
+    
 });
