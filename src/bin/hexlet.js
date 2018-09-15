@@ -1,10 +1,6 @@
 #!/usr/bin/env node
 
-import half from '..';
+import Client from '../Client';
 
-console.log(half(Number(process.argv[process.argv.length - 1])));
-
-import Parser from '../Parser';
-
-let parser = new Parser('46.148.196.76');
-parser.getXml();
+let client = new Client('46.148.196.76');
+console.log(client.getLocation());

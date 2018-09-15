@@ -32,9 +32,8 @@
   },
   "homepage": "https://github.com/KusokBanana/workshop-js#readme",
   "dependencies": {
-    "es6-request": "^2.4.0",
     "gulp": "^4.0.0",
-    "xml2js": "^0.4.19"
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",

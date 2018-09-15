@@ -1,5 +1,5 @@
 // @flow
 
-import half from './half';
+import Client from './Client';
 
-export default half;
+export default Client;
