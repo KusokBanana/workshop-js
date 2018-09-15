@@ -1,40 +1,44 @@
 // @flow
 import Location from './location'
 
-function Client(ip: any) {
-  this.ip = ip;
-  this.url = 'http://ip-api.com/json/';
-}
+class Client {
 
-Client.prototype.getLocation = function () {
+  ip = '';
+  url = 'http://ip-api.com/json/';
 
-  let response = this.send();
-  if (response && response.status === 'success') {
-    let location = new Location();
-    location.setRegion(response.regionName).setCity(response.city).setCoordinates(response.lat, response.lon).setCountry(response.country);
-
-    return location;
-  } else {
-    // throw new Error("Can't get address from ip")
-    return false;
+  constructor(ip: string) {
+    this.ip = ip;
   }
 
-};
+  getLocation() {
+    let response = this.send();
+    if (response && response.status === 'success') {
+      let location = new Location();
+      location.setRegion(response.regionName).setCity(response.city).setCoordinates(response.lat, response.lon).setCountry(response.country);
 
-Client.prototype.send = function () {
-  const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-  const request = new XMLHttpRequest();
-  request.open("GET", this.url + this.ip, false);
-  request.send(null);
+      return location;
+    } else {
+      // throw new Error("Can't get address from ip")
+      return false;
+    }
+  }
 
-  if (request.status === 200) {
-    if (request.responseText) {
-      return JSON.parse(request.responseText);
+  send() {
+    const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    const request = new XMLHttpRequest();
+    request.open("GET", this.url + this.ip, false);
+    request.send(null);
+
+    if (request.status === 200) {
+      if (request.responseText) {
+        return JSON.parse(request.responseText);
+      }
+
     }
 
-  }
+    return false;
 
-  return false;
+  }
 
 }
 
