@@ -21,6 +21,8 @@ parser: babel-eslint
 extends:
   - 'airbnb-base'
   - 'airbnb'
+  - 'prettier'
+  - 'prettier/flowtype'
   - 'plugin:jest/recommended'
   - 'plugin:flowtype/recommended'
 

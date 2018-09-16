@@ -1,28 +1,30 @@
-//#flow
+// @flow
+
 import axios from "axios";
 
-class MetaWheather {
+class MetaWeather {
   url = "https://www.metaweather.com/api/location/";
+
   httpClient: axios;
 
-  constructor(httpClient: axios) {
+  constructor(httpClient: any) {
     this.httpClient = httpClient || axios;
   }
 
   get(city: string) {
     const self = this;
     return this.getCityId(city).then(id => {
-      let date = new Date();
-      let datePath = [date.getFullYear(), date.getMonth(), date.getDate()].join(
-        "/"
-      );
+      const date = new Date();
+      const datePath = [
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      ].join("/");
       return self.httpClient
-        .get(self.url + id + "/" + datePath + "/")
+        .get(`${self.url + id}/${datePath}/`)
         .then(response => {
-          return new Promise((resolve, reject) => {
-            if (response.data) return resolve(self.getData(response.data[0]));
-            else return reject("Can't get wheather");
-          });
+          if (response.data) return self.constructor.getData(response.data[0]);
+          throw new Error("Can't get wheather");
         })
         .catch(reason => {
           throw new Error(reason);
@@ -32,19 +34,17 @@ class MetaWheather {
 
   getCityId(city: string) {
     return this.httpClient
-      .get(this.url + "search/?query=" + city)
+      .get(`${this.url}search/?query=${city}`)
       .then(response => {
-        return new Promise((resolve, reject) => {
-          if (response.data[0]) return resolve(response.data[0].woeid);
-          else reject("Incorrect city name");
-        });
+        if (response.data[0]) return response.data[0].woeid;
+        throw new Error("Incorrect city name");
       })
       .catch(reason => {
         throw new Error(reason);
       });
   }
 
-  getData(rawResponseData) {
+  static getData(rawResponseData: Object) {
     if (!rawResponseData) {
       return false;
     }
@@ -58,4 +58,4 @@ class MetaWheather {
   }
 }
 
-export default MetaWheather;
+export default MetaWeather;

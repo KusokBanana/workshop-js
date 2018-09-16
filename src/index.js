@@ -1,5 +1,9 @@
 // @flow
 
-import Geo from './Geo';
+import Geo from "./Geo";
+import WeatherService from "./Weather";
 
-export default Client;
+export default {
+  Geo,
+  WeatherService
+};

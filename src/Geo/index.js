@@ -16,18 +16,22 @@ class Geo {
 
     return this.httpClient
       .get(this.url + ip)
-      .then(response => {
-        return new Promise((resolve, reject) => {
-          if (response.data) return resolve(self.getData(response.data));
-          else return reject("Incorrect city");
-        });
-      })
+      .then(
+        response => self.constructor.getData(response.data)
+        // {
+        // return new Promise((resolve, reject) => {
+        // if (response.data) return resolve(self.getData(response.data));
+        // else return reject("Incorrect city");
+        // });
+        // return self.getData(response.data);
+        // }
+      )
       .catch(reason => {
         throw new Error(reason);
       });
   }
 
-  getData(rawReponseData: Object) {
+  static getData(rawReponseData: Object) {
     if (!rawReponseData || rawReponseData.status === "fail") {
       return false;
     }

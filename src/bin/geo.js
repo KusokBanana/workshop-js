@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-//@flow
+// @flow
 
 import Geo from '../Geo';
 
-let geo = new Geo();
-let promise = geo.getLocation("46.148.196.76").then(result => {
+const geo = new Geo();
+geo.getLocation('46.148.196.76').then((result) => {
   console.log(result);
 });

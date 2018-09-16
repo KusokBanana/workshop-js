@@ -1,45 +1,41 @@
 // @flow
-import WheatherService from "../src/Wheather/WheatherService";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import WeatherService from "../src/Weather/WeatherService";
 
-test("real data, service - open", () => {
-    let mock = new MockAdapter(axios);
-    const toBe = {
-        windSpeed: 4.1,
-        windDeg: 80,
-        temp: 280.32,
-        pressure: 1012
-    };
+it("real data, service - open", async () => {
+  const mock = new MockAdapter(axios);
+  const toBe = {
+    windSpeed: 4.1,
+    windDeg: 80,
+    temp: 280.32,
+    pressure: 1012
+  };
 
-    const toReturn = {
-        wind: {
-            speed: 4.1,
-            deg: 80,
-        },
-        main: {
-            temp: 280.32,
-            pressure: 1012
-        }
-    };
+  const toReturn = {
+    wind: {
+      speed: 4.1,
+      deg: 80
+    },
+    main: {
+      temp: 280.32,
+      pressure: 1012
+    },
+    cod: 200
+  };
 
-    mock.onGet().reply(200, toReturn);
+  mock.onGet().reply(200, toReturn);
 
-    const wheatherService = new WheatherService('open', axios);
-    wheatherService.getInfo("berlin").then(result => {
-      expect(result).toEqual(toBe);
-    });
+  const weatherService = new WeatherService("open", axios);
+
+  expect(weatherService.getInfo("berlin")).resolves.toEqual(toBe);
 });
 
-test("unreal data, service - open", () => {
-    let mock = new MockAdapter(axios);
+it("unreal data, service - open", async () => {
+  const mock = new MockAdapter(axios);
 
-    const toReturn = {};
+  mock.onGet().reply(500);
 
-    mock.onGet().reply(500);
-
-    const wheatherService = new WheatherService('open', axios);
-    wheatherService.getInfo("blabla").then(result => {
-      expect(result).toThrow();
-    });
+  const weatherService = new WeatherService("open", axios);
+  expect(weatherService.getInfo("blabla")).resolves.toThrow();
 });

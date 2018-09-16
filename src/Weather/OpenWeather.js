@@ -1,11 +1,14 @@
+// @flow
+
 import axios from "axios";
 
-class OpenWheather {
+class OpenWeather {
   url =
     "https://samples.openweathermap.org/data/2.5/weather?appid=155c82781b0e55342fe0033e8b7ef307&q=";
+
   httpClient: axios;
 
-  constructor(httpClient: axios) {
+  constructor(httpClient: any) {
     this.httpClient = httpClient || axios;
   }
 
@@ -13,21 +16,16 @@ class OpenWheather {
     const self = this;
 
     return this.httpClient.get(this.url + city).then(response => {
-      return new Promise((resolve, reject) => {
-        if (response.data && response.data.cod === "200") {
-          let data = response.data;
-          if (data) {
-            return resolve(self.getData(data));
-          }
+      if (response.data && response.data.cod === 200) {
+        if (response.data) {
+          return self.constructor.getData(response.data);
         }
-        return reject("Can't get wheather");
-      }).catch(reason => {
-        throw new Error(reason);
-      });
+      }
+      throw new Error("Can't get wheather");
     });
   }
 
-  getData(rawResponseData) {
+  static getData(rawResponseData: Object) {
     if (!rawResponseData) {
       return false;
     }
@@ -41,4 +39,4 @@ class OpenWheather {
   }
 }
 
-export default OpenWheather;
+export default OpenWeather;

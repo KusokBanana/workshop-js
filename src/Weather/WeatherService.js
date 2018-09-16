@@ -1,15 +1,17 @@
-//@flow
+// @flow
 
-import OpenWheather from "./OpenWheather";
-import MetaWheather from "./MetaWheather";
 import axis from "axios";
+import OpenWeather from "./OpenWeather";
+import MetaWeather from "./MetaWeather";
 
-class WheatherService {
+class WeatherService {
   classes = {
-    meta: MetaWheather,
-    open: OpenWheather
+    meta: MetaWeather,
+    open: OpenWeather
   };
+
   service: string;
+
   httpClient: axis;
 
   constructor(serviceName: string, httpClient: any) {
@@ -19,14 +21,14 @@ class WheatherService {
 
   getInfo(city: string, serviceName: any) {
     this.service = serviceName || this.service;
-    const serviceClass = this.classes[this.service];
-    if (serviceClass === undefined) {
+    const ServiceClass = this.classes[this.service];
+    if (ServiceClass === undefined) {
       throw new Error("Incorrect service name");
     }
 
-    let service = new serviceClass(this.httpClient);
+    const service = new ServiceClass(this.httpClient);
     return service.get(city);
   }
 }
 
-export default WheatherService;
+export default WeatherService;
