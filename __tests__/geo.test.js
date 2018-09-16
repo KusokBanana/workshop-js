@@ -35,6 +35,6 @@ test("can't get response", async () => {
     mock.onGet().reply(500);
 
     const geo = new Geo(axios);
-    return expect(geo.getLocation("46.148.196.76")).rejects.toBeFalsy();
+    return expect(geo.getLocation("46.148.196.76")).resolves.toBeFalsy();
     
 });
