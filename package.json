@@ -1,6 +1,6 @@
 {
   "name": "@username/workshop-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "## Geo Data ### Example of use:",
   "main": "dist/index.js",
   "bin": {
