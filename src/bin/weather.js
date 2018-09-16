@@ -9,10 +9,10 @@ program
   .arguments("<city>")
   .version("0.0.1", "-v, --version")
   .option("--service <value>")
-  .parse(process.argv)
-  .action(async city => {
+  .action(city => {
     const weather = new WeatherService(program.serviceName);
-    await weather.getInfo(city).then(data => {
+    weather.getInfo(city).then(data => {
       console.log(data);
     });
-  });
+  })
+  .parse(process.argv);

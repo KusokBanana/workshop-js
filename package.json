@@ -1,7 +1,7 @@
 {
   "name": "@username/workshop-js",
   "version": "0.0.3",
-  "description": "",
+  "description": "## Geo Data ### Example of use:",
   "main": "dist/index.js",
   "bin": {
     "weather-kusok": "dist/bin/weather.js"
