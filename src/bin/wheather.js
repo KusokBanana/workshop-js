@@ -17,4 +17,6 @@ for (let i = 2; i < process.argv.length; i++) {
 }
 
 let wheatherService = new WheatherService(service);
-wheatherService.getInfo(city);
+wheatherService.getInfo(city).then(response => {
+    console.log(response);
+});

@@ -13,16 +13,22 @@ class Geo {
 
   async getLocation(ip: string) {
     const self = this;
-    const promise = await this.httpClient.get(this.url + ip, {
-      transformResponse: [
-        data => {
-          let responseObj = JSON.parse(data);
-          return self.getData(responseObj);
-        }
-      ]
-    });
 
-    return promise;
+    return new Promise((resolve) => {
+      resolve(() => { 
+        return this.httpClient.get(this.url + ip, {
+        transformResponse: [
+          data => {
+            let responseObj = JSON.parse(data);
+            return self.getData(responseObj);
+          }
+        ]
+      }).then((response) => {
+        return 'alala';
+      });
+    });
+  })
+
   }
 
   getData(rawReponseData: Object) {

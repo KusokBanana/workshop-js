@@ -9,35 +9,44 @@ class MetaWheather {
     this.httpClient = httpClient || axios;
   }
 
-  async get(city: string) {
+  get(city: string) {
     const self = this;
-    return await this.getCityId(city).then(response => {
-
-      let id = response.data;
+    return this.getCityId(city).then(id => {
       let date = new Date();
-      let datePath = [date.getFullYear(), date.getMonth(), date.getDate()].join("/");
-      self.httpClient.get(self.url + id + "/" + datePath + "/", {
-        transformResponse: [
-          data => {
-            let dataObj = JSON.parse(data);
-            return self.getData(dataObj[0]);
-          }
-        ]
-      });
+      let datePath = [date.getFullYear(), date.getMonth(), date.getDate()].join(
+        "/"
+      );
+      return self.httpClient
+        .get(self.url + id + "/" + datePath + "/", {
+          transformResponse: [
+            data => {
+              let dataObj = JSON.parse(data);
+              return self.getData(dataObj[0]);
+            }
+          ]
+        })
+        .then(self.transformDataInPromise);
     });
   }
 
-  async getCityId(city: string) {
-    const promise = this.httpClient.get(this.url + "search/?query=" + city, {
-      transformResponse: [
-        data => {
-          let dataObj = JSON.parse(data);
-          return dataObj[0].woeid;
-        }
-      ]
-    });
+  getCityId(city: string) {
+    return this.httpClient
+      .get(this.url + "search/?query=" + city, {
+        transformResponse: [
+          data => {
+            let dataObj = JSON.parse(data);
+            return dataObj[0].woeid;
+          }
+        ]
+      })
+      .then(this.transformDataInPromise);
+  }
 
-    return await promise;
+  transformDataInPromise(response) {
+    return new Promise((resolve, reject) => {
+      if (response.data) return resolve(response.data);
+      else return reject();
+    });
   }
 
   getData(rawResponseData) {
@@ -52,7 +61,6 @@ class MetaWheather {
       pressure: rawResponseData.air_pressure
     };
   }
-
 }
 
 export default MetaWheather;

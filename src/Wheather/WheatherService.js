@@ -26,9 +26,7 @@ class WheatherService {
     }
 
     let service = new serviceClass(this.httpClient);
-    return await service.get(city).then(response => {
-      console.log(response);
-    });
+    return service.get(city);
   }
 }
 
