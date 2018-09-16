@@ -10,7 +10,7 @@ program
   .version("1.0.0", "-v, --version")
   .option("--service <value>")
   .action(city => {
-    const weather = new WeatherService(program.serviceName);
+    const weather = new WeatherService(program.service);
     weather.getInfo(city).then(data => {
       console.log(data);
     });

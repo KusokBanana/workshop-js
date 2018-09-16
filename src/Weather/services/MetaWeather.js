@@ -7,12 +7,13 @@ class MetaWeather {
 
   httpClient: axios;
 
+  static name = 'meta';
+
   constructor(httpClient: Object) {
     this.httpClient = httpClient;
   }
 
   get(city: string) {
-    const self = this;
     return this.getCityId(city).then(id => {
       const date = new Date();
       const datePath = [
@@ -20,14 +21,25 @@ class MetaWeather {
         date.getMonth(),
         date.getDate()
       ].join("/");
-      return self.httpClient
-        .get(`${self.url + id}/${datePath}/`)
+      return this.httpClient
+        .get(`${this.url + id}/${datePath}/`)
         .then(response => {
-          if (response.data) return self.constructor.getData(response.data[0]);
+          if (response.data) {
+            const responseData = response.data[0];
+
+            return {
+              windSpeed: responseData.wind_speed,
+              windDeg: responseData.wind_direction,
+              temp: responseData.the_temp,
+              pressure: responseData.air_pressure
+            };
+
+          }
           throw new Error("Can't get wheather");
         })
         .catch(reason => {
-          throw new Error(reason);
+          console.error(reason);
+          return false;
         });
     });
   }
@@ -40,22 +52,11 @@ class MetaWeather {
         throw new Error("Incorrect city name");
       })
       .catch(reason => {
-        throw new Error(reason);
+        console.error(reason);
+        return false;
       });
   }
 
-  static getData(rawResponseData: Object) {
-    if (!rawResponseData) {
-      return false;
-    }
-
-    return {
-      windSpeed: rawResponseData.wind_speed,
-      windDeg: rawResponseData.wind_direction,
-      temp: rawResponseData.the_temp,
-      pressure: rawResponseData.air_pressure
-    };
-  }
 }
 
 export default MetaWeather;

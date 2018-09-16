@@ -8,33 +8,32 @@ class OpenWeather {
 
   httpClient: axios;
 
+  static name = 'open';
+
   constructor(httpClient: Object) {
     this.httpClient = httpClient;
   }
 
   get(city: string) {
-    const self = this;
-
     return this.httpClient.get(this.url + city).then(response => {
+      const responseData = response.data;
       if (response.data && response.data.cod === 200) {
-        return self.constructor.getData(response.data);
+
+        return {
+          windSpeed: responseData.wind.speed,
+          windDeg: responseData.wind.deg,
+          temp: responseData.main.temp,
+          pressure: responseData.main.pressure
+        };
+
       }
       throw new Error("Can't get wheather");
+    }).catch(reason => {
+      console.error(reason);
+      return false;
     });
   }
 
-  static getData(rawResponseData: Object) {
-    if (!rawResponseData) {
-      return false;
-    }
-
-    return {
-      windSpeed: rawResponseData.wind.speed,
-      windDeg: rawResponseData.wind.deg,
-      temp: rawResponseData.main.temp,
-      pressure: rawResponseData.main.pressure
-    };
-  }
 }
 
 export default OpenWeather;

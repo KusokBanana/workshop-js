@@ -37,5 +37,5 @@ it("unreal data, service - open", async () => {
   mock.onGet().reply(500);
 
   const weatherService = new WeatherService("open", axios);
-  return expect(weatherService.getInfo("blabla")).rejects.toThrow();
+  return expect(weatherService.getInfo("blabla")).rejects.toBeFalsy();
 });

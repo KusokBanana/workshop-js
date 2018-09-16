@@ -12,38 +12,33 @@ class Geo {
   }
 
   getLocation(ip: string) {
-    const self = this;
 
     return this.httpClient
       .get(this.url + ip)
       .then(
-        response => self.constructor.getData(response.data)
-        // {
-        // return new Promise((resolve, reject) => {
-        // if (response.data) return resolve(self.getData(response.data));
-        // else return reject("Incorrect city");
-        // });
-        // return self.getData(response.data);
-        // }
+        response => {
+          const reponseData = response.data;
+
+          if (!reponseData || reponseData.status === "fail") {
+            throw new Error("Can't get location data")
+          }
+
+          return {
+            city: reponseData.city,
+            country: reponseData.country,
+            regionName: reponseData.regionName,
+            lon: reponseData.lon,
+            lat: reponseData.lat
+          };
+
+        }
       )
       .catch(reason => {
-        throw new Error(reason);
+        console.error(reason);
+        return false;
       });
   }
 
-  static getData(rawReponseData: Object) {
-    if (!rawReponseData || rawReponseData.status === "fail") {
-      return false;
-    }
-
-    return {
-      city: rawReponseData.city,
-      country: rawReponseData.country,
-      regionName: rawReponseData.regionName,
-      lon: rawReponseData.lon,
-      lat: rawReponseData.lat
-    };
-  }
 }
 
 export default Geo;
