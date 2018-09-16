@@ -4,9 +4,12 @@
 ### Example of use:
 
 ```javascript
-import Geo from './src'; <br>
-let geo = new Geo(); <br>
-geo.getLocation('46.148.196.76', function(location) { console.log(location); })
+import Geo from '../Geo';
+
+let geo = new Geo();
+let promise = geo.getLocation("46.148.196.76").then(result => {
+  console.log(result);
+});
 ```
 ### Response data
 ```
