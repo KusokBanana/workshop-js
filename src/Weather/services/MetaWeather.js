@@ -7,8 +7,8 @@ class MetaWeather {
 
   httpClient: axios;
 
-  constructor(httpClient: any) {
-    this.httpClient = httpClient || axios;
+  constructor(httpClient: Object) {
+    this.httpClient = httpClient;
   }
 
   get(city: string) {

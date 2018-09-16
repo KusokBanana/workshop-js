@@ -8,8 +8,8 @@ class OpenWeather {
 
   httpClient: axios;
 
-  constructor(httpClient: any) {
-    this.httpClient = httpClient || axios;
+  constructor(httpClient: Object) {
+    this.httpClient = httpClient;
   }
 
   get(city: string) {
@@ -17,9 +17,7 @@ class OpenWeather {
 
     return this.httpClient.get(this.url + city).then(response => {
       if (response.data && response.data.cod === 200) {
-        if (response.data) {
-          return self.constructor.getData(response.data);
-        }
+        return self.constructor.getData(response.data);
       }
       throw new Error("Can't get wheather");
     });

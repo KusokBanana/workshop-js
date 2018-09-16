@@ -1,32 +1,27 @@
 // @flow
 
-import axis from "axios";
-import OpenWeather from "./OpenWeather";
-import MetaWeather from "./MetaWeather";
+import axios from "axios";
+import WeatherFacade from "./WeatherFacade";
 
 class WeatherService {
-  classes = {
-    meta: MetaWeather,
-    open: OpenWeather
-  };
+  serviceName: string;
 
-  service: string;
+  httpClient: axios;
 
-  httpClient: axis;
+  servicesFacade: Object;
 
-  constructor(serviceName: string, httpClient: any) {
-    this.service = serviceName || "open";
-    this.httpClient = httpClient || axis;
+  constructor(serviceName: string, httpClient: any, facade: any) {
+    this.serviceName = serviceName || "open";
+    this.httpClient = httpClient || axios;
+    this.servicesFacade = facade || new WeatherFacade();
   }
 
   getInfo(city: string, serviceName: any) {
-    this.service = serviceName || this.service;
-    const ServiceClass = this.classes[this.service];
-    if (ServiceClass === undefined) {
-      throw new Error("Incorrect service name");
-    }
+    this.serviceName = serviceName || this.serviceName;
 
+    const ServiceClass = this.servicesFacade.getService(this.serviceName);
     const service = new ServiceClass(this.httpClient);
+
     return service.get(city);
   }
 }
