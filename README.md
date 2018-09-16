@@ -22,6 +22,8 @@ let promise = geo.getLocation("46.148.196.76").then(result => {
 
 ## Weather
 
+##### Default services: open, meta
+
 ### Example of use:
 ```
 node dist/bin/weather.js London
@@ -36,4 +38,22 @@ node dist/bin/weather.js --service meta London
   windDeg: 256.60404204585217,
   temp: 18.02,
   pressure: 1017.3299999999999 }
+```
+
+### Custom weather service
+
+*(see examples in /src/examples/ and using in /src/examples/index.js)*
+
+```
+import WeatherFacade from "../Weather/WeatherFacade";
+import CustomWeather from "./CustomWeather";
+import WeatherService from "../Weather";
+
+const facade = new WeatherFacade();
+facade.addService("custom", CustomWeather);
+
+const service = new WeatherService("custom", "", facade);
+service.getInfo("Moscow").then(data => {
+  console.log(data);
+});
 ```
