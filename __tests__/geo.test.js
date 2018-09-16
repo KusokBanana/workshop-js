@@ -6,16 +6,16 @@ import MockAdapter from "axios-mock-adapter";
 test('real ip, real data', () => {
 
     let mock = new MockAdapter(axios);
-    const mockResponseData = {
+    const toBeAndReturn = {
         city: 'Moscow',
         country: 'Russia',
         regionName: 'Moscow'
     };
-    mock.onGet().reply(200, mockResponseData);
+    mock.onGet().reply(200, toBeAndReturn);
 
     let geo = new Geo(axios);
     geo.getLocation("46.148.196.76").then((result: Object) => {
-      expect(result.data).toEqual(mockResponseData);
+        expect(result).toEqual(toBeAndReturn);
     });
 
 
@@ -23,14 +23,12 @@ test('real ip, real data', () => {
 
 test("can't get get data", () => {
     let mock = new MockAdapter(axios);
-    const mockResponseData = {
-        status: 'fail',
-    };
-    mock.onGet().reply(200, mockResponseData);
+    const toReturn = { status: "fail" };
+    mock.onGet().reply(200, toReturn);
 
     let geo = new Geo(axios);
     geo.getLocation('0.0.0.0').then((result: Object) => {
-        expect(result.data).toBeFalsy();
+        expect(result).toBeFalsy();
     })
     
 });
@@ -42,7 +40,7 @@ test("can't get response", () => {
 
     let geo = new Geo(axios);
     geo.getLocation("46.148.196.76").then((result: Object) => {
-      expect(result.data).toBeFalsy();
+      expect(result).toThrow();
     });
     
 });

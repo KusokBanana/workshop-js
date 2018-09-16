@@ -17,36 +17,31 @@ class MetaWheather {
         "/"
       );
       return self.httpClient
-        .get(self.url + id + "/" + datePath + "/", {
-          transformResponse: [
-            data => {
-              let dataObj = JSON.parse(data);
-              return self.getData(dataObj[0]);
-            }
-          ]
+        .get(self.url + id + "/" + datePath + "/")
+        .then(response => {
+          return new Promise((resolve, reject) => {
+            if (response.data) return resolve(self.getData(response.data[0]));
+            else return reject("Can't get wheather");
+          });
         })
-        .then(self.transformDataInPromise);
+        .catch(reason => {
+          throw new Error(reason);
+        });
     });
   }
 
   getCityId(city: string) {
     return this.httpClient
-      .get(this.url + "search/?query=" + city, {
-        transformResponse: [
-          data => {
-            let dataObj = JSON.parse(data);
-            return dataObj[0].woeid;
-          }
-        ]
+      .get(this.url + "search/?query=" + city)
+      .then(response => {
+        return new Promise((resolve, reject) => {
+          if (response.data[0]) return resolve(response.data[0].woeid);
+          else reject("Incorrect city name");
+        });
       })
-      .then(this.transformDataInPromise);
-  }
-
-  transformDataInPromise(response) {
-    return new Promise((resolve, reject) => {
-      if (response.data) return resolve(response.data);
-      else return reject();
-    });
+      .catch(reason => {
+        throw new Error(reason);
+      });
   }
 
   getData(rawResponseData) {

@@ -11,24 +11,20 @@ class Geo {
     this.httpClient = httpClient || axios;
   }
 
-  async getLocation(ip: string) {
+  getLocation(ip: string) {
     const self = this;
 
-    return new Promise((resolve) => {
-      resolve(() => { 
-        return this.httpClient.get(this.url + ip, {
-        transformResponse: [
-          data => {
-            let responseObj = JSON.parse(data);
-            return self.getData(responseObj);
-          }
-        ]
-      }).then((response) => {
-        return 'alala';
+    return this.httpClient
+      .get(this.url + ip)
+      .then(response => {
+        return new Promise((resolve, reject) => {
+          if (response.data) return resolve(self.getData(response.data));
+          else return reject("Incorrect city");
+        });
+      })
+      .catch(reason => {
+        throw new Error(reason);
       });
-    });
-  })
-
   }
 
   getData(rawReponseData: Object) {

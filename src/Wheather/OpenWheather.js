@@ -1,9 +1,8 @@
-import Wheather from "./Wheather";
 import axios from "axios";
 
 class OpenWheather {
   url =
-    "https://samples.openweathermap.org/data/2.5/weather?appid=b6907d289e10d714a6e88b30761fae22&q=";
+    "https://samples.openweathermap.org/data/2.5/weather?appid=155c82781b0e55342fe0033e8b7ef307&q=";
   httpClient: axios;
 
   constructor(httpClient: axios) {
@@ -13,26 +12,23 @@ class OpenWheather {
   get(city: string) {
     const self = this;
 
-    return this.httpClient
-      .get(this.url + city, {
-        transformResponse: [
-          data => {
-            return self.getData(JSON.parse(data));
+    return this.httpClient.get(this.url + city).then(response => {
+      return new Promise((resolve, reject) => {
+        if (response.data && response.data.cod === "200") {
+          let data = response.data;
+          if (data) {
+            return resolve(self.getData(data));
           }
-        ]
-      })
-        .then(this.transformDataInPromise);
-  }
-
-  transformDataInPromise(response) {
-    return new Promise((resolve, reject) => {
-      if (response.data) return resolve(response.data);
-      else return reject();
+        }
+        return reject("Can't get wheather");
+      }).catch(reason => {
+        throw new Error(reason);
+      });
     });
   }
 
   getData(rawResponseData) {
-    if (!rawResponseData || rawResponseData.cod !== 200) {
+    if (!rawResponseData) {
       return false;
     }
 
