@@ -45,14 +45,10 @@ node dist/bin/weather.js --service meta London
 *(see examples in /src/examples/ and using in /src/examples/index.js)*
 
 ```
-import WeatherFacade from "../Weather/WeatherFacade";
 import CustomWeather from "./CustomWeather";
-import WeatherService from "../Weather";
+import WeatherService from "./dist";
 
-const facade = new WeatherFacade();
-facade.addService("custom", CustomWeather);
-
-const service = new WeatherService("custom", "", facade);
+const service = new WeatherService(CustomWeather.name, [CustomWeather]);
 service.getInfo("Moscow").then(data => {
   console.log(data);
 });
