@@ -28,7 +28,7 @@ it("real data, service - open", async () => {
 
   const weatherService = new WeatherService("open", axios);
 
-  expect(weatherService.getInfo("berlin")).resolves.toEqual(toBe);
+  return expect(weatherService.getInfo("berlin")).resolves.toEqual(toBe);
 });
 
 it("unreal data, service - open", async () => {
@@ -37,5 +37,5 @@ it("unreal data, service - open", async () => {
   mock.onGet().reply(500);
 
   const weatherService = new WeatherService("open", axios);
-  expect(weatherService.getInfo("blabla")).resolves.toThrow();
+  return expect(weatherService.getInfo("blabla")).rejects.toThrow();
 });
