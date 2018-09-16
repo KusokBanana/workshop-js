@@ -7,7 +7,7 @@ import WeatherService from "../Weather";
 program
   .description("Get weather for city")
   .arguments("<city>")
-  .version("0.0.1", "-v, --version")
+  .version("1.0.0", "-v, --version")
   .option("--service <value>")
   .action(city => {
     const weather = new WeatherService(program.serviceName);
